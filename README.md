@@ -37,11 +37,11 @@ The [Swift Package Manager](https://swift.org/package-manager/) is a decentraliz
 
 var pcg = PermutedCongruentialGenerator.default
 
-["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].randomElement(using: &pcg)!
-// "Wednesday"
+["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].randomElement(using: &pcg)!
+// "Wed"
 
-["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].shuffled(using: &pcg)
-// ["Tuesday", "Monday", "Friday", "Thursday", "Sunday", "Saturday", "Wednesday"]
+["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].shuffled(using: &pcg)
+// ["Tue", "Mon", "Fri", "Thu", "Sun", "Sat", "Wed"]
 
 Int.random(in: 1...6, using: &pcg)
 // 5
