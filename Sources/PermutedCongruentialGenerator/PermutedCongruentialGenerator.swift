@@ -37,7 +37,7 @@ import Foundation
 // Thread safe: No (But accessing `default` across threads *is* safe as it
 //                  returns a thread local instance)
 //
-public class PermutedCongruentialGenerator : RandomNumberGenerator {
+public final class PermutedCongruentialGenerator : RandomNumberGenerator {
   
   private struct PCGRand32 {
     

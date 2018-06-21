@@ -32,7 +32,7 @@ import Foundation
 // Cryptographically secure: Yes
 // Thread safe: Yes
 //
-public class DeviceRandom : RandomNumberGenerator {
+public final class DeviceRandom : RandomNumberGenerator {
   
   // The device source
   public enum Source: String {
