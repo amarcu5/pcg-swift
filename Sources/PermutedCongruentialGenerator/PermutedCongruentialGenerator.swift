@@ -37,7 +37,7 @@ import Foundation
 // Thread safe: No (But accessing `default` across threads *is* safe as it
 //                  returns a thread local instance)
 //
-class PermutedCongruentialGenerator : RandomNumberGenerator {
+public class PermutedCongruentialGenerator : RandomNumberGenerator {
   
   private struct PCGRand32 {
     
@@ -127,7 +127,7 @@ class PermutedCongruentialGenerator : RandomNumberGenerator {
   private var _generator2 = PCGRand32()
   
   // Seed underlying PCG generators with another RNG
-  func seed<T: RandomNumberGenerator>(withRandomNumberGenerator generator: inout T) {
+  public func seed<T: RandomNumberGenerator>(withRandomNumberGenerator generator: inout T) {
     var seeds = ContiguousArray<UInt64>(repeating: 0, count: 4)
     seeds.withUnsafeMutableBytes { bytes in
       
@@ -139,7 +139,7 @@ class PermutedCongruentialGenerator : RandomNumberGenerator {
   }
   
   // Seed underlying PCG generators by value
-  func seed(seed1: UInt64, seed2: UInt64, seq1: UInt64, seq2: UInt64) {
+  public func seed(seed1: UInt64, seed2: UInt64, seq1: UInt64, seq2: UInt64) {
     
     // Ensure streams for each of the generators are distinct
     let mask: UInt64 = ~0 >> 1
@@ -154,12 +154,12 @@ class PermutedCongruentialGenerator : RandomNumberGenerator {
   }
   
   // Generate random UInt64
-  func next() -> UInt64 {
+  public func next() -> UInt64 {
     return UInt64(_generator1.next()) << 32 | UInt64(_generator2.next())
   }
   
   // Advance underlying PCG generators forwards or backwards
-  func advance<N: BinaryInteger>(_ steps: N) {
+  public func advance<N: BinaryInteger>(_ steps: N) {
     _generator1.advance(Int64(steps))
     _generator2.advance(Int64(steps))
   }
