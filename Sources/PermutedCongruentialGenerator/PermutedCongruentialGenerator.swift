@@ -128,14 +128,10 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
   
   // Seed underlying PCG generators with another RNG
   public func seed<T: RandomNumberGenerator>(withRandomNumberGenerator generator: inout T) {
-    var seeds = ContiguousArray<UInt64>(repeating: 0, count: 4)
-    seeds.withUnsafeMutableBytes { bytes in
-      
-      // FIXME: De-underscore after swift-evolution amendment
-      generator._fill(bytes: bytes)
-    }
-    
-    seed(seed1: seeds[0], seed2: seeds[1], seq1: seeds[2], seq2: seeds[3])
+    seed(seed1: generator.next(),
+         seed2: generator.next(),
+         seq1: generator.next(),
+         seq2: generator.next())
   }
   
   // Seed underlying PCG generators by value
@@ -162,5 +158,17 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
   public func advance<N: BinaryInteger>(_ steps: N) {
     _generator1.advance(Int64(steps))
     _generator2.advance(Int64(steps))
+  }
+  
+  // MARK: `DeviceRandom` specific performance enhancements
+
+  // Seed underlying PCG generators using the device generator
+  public func seed<T: DeviceRandom>(withRandomNumberGenerator generator: inout T) {
+    var seeds = ContiguousArray<UInt64>(repeating: 0, count: 4)
+    seeds.withUnsafeMutableBytes { bytes in
+      generator.fill(bytes: bytes)
+    }
+    
+    seed(seed1: seeds[0], seed2: seeds[1], seq1: seeds[2], seq2: seeds[3])
   }
 }

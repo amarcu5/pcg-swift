@@ -75,8 +75,8 @@ public final class DeviceRandom : RandomNumberGenerator {
     return value
   }
   
-  // FIXME: De-underscore after swift-evolution amendment
-  public func _fill(bytes: UnsafeMutableRawBufferPointer) {
+  // Fill buffer with random bytes
+  public func fill(bytes: UnsafeMutableRawBufferPointer) {
     read(_fileDescriptor, bytes.baseAddress, bytes.count)
   }
 }
