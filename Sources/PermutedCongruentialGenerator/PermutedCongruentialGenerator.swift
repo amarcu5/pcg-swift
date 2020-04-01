@@ -114,7 +114,6 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
       
       if threadLocalGenerator == nil {
         threadLocalGenerator = PermutedCongruentialGenerator()
-        threadLocalGenerator!.seed(with: &DeviceRandom.shared)
         localThreadDictionary[threadKey] = threadLocalGenerator
       }
       
@@ -125,6 +124,21 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
   
   private var _generator1 = PCGRand32()
   private var _generator2 = PCGRand32()
+  
+  // New instance seeded using another RNG
+  public init<T: RandomNumberGenerator>(seededWith generator: inout T) {
+    seed(with: &generator)
+  }
+  
+  // New instance seeded by value
+  public init(seededWith values: (UInt64, UInt64, UInt64, UInt64)) {
+    seed(with: values)
+  }
+  
+  // New instance seeded using the device generator
+  public convenience init() {
+    self.init(seededWith: &DeviceRandom.shared)
+  }
   
   // Seed underlying PCG generators using another RNG
   public func seed<T: RandomNumberGenerator>(with generator: inout T) {
@@ -163,6 +177,11 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
   
   // MARK: `DeviceRandom` specific performance enhancements
 
+  // New instance seeded using the device generator
+  public init<T: DeviceRandom>(seededWith generator: inout T) {
+    seed(with: &generator)
+  }
+  
   // Seed underlying PCG generators using the device generator
   public func seed<T: DeviceRandom>(with generator: inout T) {
     var values = (UInt64(0), UInt64(0), UInt64(0), UInt64(0))
