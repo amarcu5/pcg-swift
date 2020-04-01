@@ -107,15 +107,15 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
   // Returns a default thread local instance seeded by the device generator
   public static var `default`: PermutedCongruentialGenerator {
     get {
-      let threadDictionaryKey = "com.random.pcg"
+      let threadKey = "com.random.pcg" as NSString
       
       let localThreadDictionary = Thread.current.threadDictionary
-      var threadLocalGenerator = localThreadDictionary[threadDictionaryKey] as? PermutedCongruentialGenerator
+      var threadLocalGenerator = localThreadDictionary[threadKey] as? PermutedCongruentialGenerator
       
       if threadLocalGenerator == nil {
         threadLocalGenerator = PermutedCongruentialGenerator()
         threadLocalGenerator!.seed(withRandomNumberGenerator: &DeviceRandom.default)
-        localThreadDictionary[threadDictionaryKey] = threadLocalGenerator
+        localThreadDictionary[threadKey] = threadLocalGenerator
       }
       
       return threadLocalGenerator!
