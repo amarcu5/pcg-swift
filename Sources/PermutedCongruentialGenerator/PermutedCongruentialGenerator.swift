@@ -114,7 +114,7 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
       
       if threadLocalGenerator == nil {
         threadLocalGenerator = PermutedCongruentialGenerator()
-        threadLocalGenerator!.seed(withRandomNumberGenerator: &DeviceRandom.shared)
+        threadLocalGenerator!.seed(with: &DeviceRandom.shared)
         localThreadDictionary[threadKey] = threadLocalGenerator
       }
       
@@ -126,16 +126,17 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
   private var _generator1 = PCGRand32()
   private var _generator2 = PCGRand32()
   
-  // Seed underlying PCG generators with another RNG
-  public func seed<T: RandomNumberGenerator>(withRandomNumberGenerator generator: inout T) {
-    seed(seed1: generator.next(),
-         seed2: generator.next(),
-         seq1: generator.next(),
-         seq2: generator.next())
+  // Seed underlying PCG generators using another RNG
+  public func seed<T: RandomNumberGenerator>(with generator: inout T) {
+    seed(with: (generator.next(),
+                generator.next(),
+                generator.next(),
+                generator.next()))
   }
   
   // Seed underlying PCG generators by value
-  public func seed(seed1: UInt64, seed2: UInt64, seq1: UInt64, seq2: UInt64) {
+  public func seed(with values: (UInt64, UInt64, UInt64, UInt64)) {
+    let (seed1, seed2, seq1, seq2) = values
     
     // Ensure streams for each of the generators are distinct
     let mask: UInt64 = ~0 >> 1
@@ -163,12 +164,12 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
   // MARK: `DeviceRandom` specific performance enhancements
 
   // Seed underlying PCG generators using the device generator
-  public func seed<T: DeviceRandom>(withRandomNumberGenerator generator: inout T) {
-    var seeds = ContiguousArray<UInt64>(repeating: 0, count: 4)
-    seeds.withUnsafeMutableBytes { bytes in
+  public func seed<T: DeviceRandom>(with generator: inout T) {
+    var values = (UInt64(0), UInt64(0), UInt64(0), UInt64(0))
+    withUnsafeMutableBytes(of: &values) { bytes in
       generator.fill(bytes: bytes)
     }
     
-    seed(seed1: seeds[0], seed2: seeds[1], seq1: seeds[2], seq2: seeds[3])
+    seed(with: values)
   }
 }

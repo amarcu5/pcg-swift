@@ -24,7 +24,7 @@ final class PermutedCongruentialGeneratorTests: XCTestCase {
     
     // Create generator with specific seed
     var pcg = PermutedCongruentialGenerator()
-    pcg.seed(seed1: 42, seed2: 42, seq1: 54, seq2: 54)
+    pcg.seed(with: (42, 42, 54, 54))
     
     // Generate the values
     var values = [UInt64]()
