@@ -34,7 +34,7 @@ import Foundation
 // Statistical quality: Excellent (Passes TestU01's BigCrush and PractRand)
 // Cryptographically secure: No
 //
-// Thread safe: No (But accessing `default` across threads *is* safe as it
+// Thread safe: No (But accessing `shared` across threads *is* safe as it
 //                  returns a thread local instance)
 //
 public final class PermutedCongruentialGenerator : RandomNumberGenerator {
@@ -104,8 +104,8 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
     }
   }
   
-  // Returns a default thread local instance seeded by the device generator
-  public static var `default`: PermutedCongruentialGenerator {
+  // Returns a shared thread local instance seeded by the device generator
+  public static var shared: PermutedCongruentialGenerator {
     get {
       let threadKey = "com.random.pcg" as NSString
       
@@ -114,7 +114,7 @@ public final class PermutedCongruentialGenerator : RandomNumberGenerator {
       
       if threadLocalGenerator == nil {
         threadLocalGenerator = PermutedCongruentialGenerator()
-        threadLocalGenerator!.seed(withRandomNumberGenerator: &DeviceRandom.default)
+        threadLocalGenerator!.seed(withRandomNumberGenerator: &DeviceRandom.shared)
         localThreadDictionary[threadKey] = threadLocalGenerator
       }
       

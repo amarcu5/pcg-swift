@@ -35,7 +35,7 @@ The [Swift Package Manager](https://swift.org/package-manager/) is a decentraliz
 
 ```Swift
 
-var pcg = PermutedCongruentialGenerator.default
+var pcg = PermutedCongruentialGenerator.shared
 
 ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].randomElement(using: &pcg)!
 // "Wed"

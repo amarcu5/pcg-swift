@@ -49,8 +49,8 @@ public final class DeviceRandom : RandomNumberGenerator {
     }
   }
   
-  // Returns default global instance with "/dev/urandom"
-  public static var `default` = DeviceRandom(source: .urandom)
+  // Returns shared global instance with "/dev/urandom"
+  public static var shared = DeviceRandom(source: .urandom)
   
   private let _fileDescriptor: Int32
   

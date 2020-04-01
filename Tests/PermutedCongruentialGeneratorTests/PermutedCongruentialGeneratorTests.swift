@@ -42,21 +42,23 @@ final class PermutedCongruentialGeneratorTests: XCTestCase {
     let testCount = 1000
     let stepSize = 10
     
+    var pcg = PermutedCongruentialGenerator.shared
+    
     // Generate initial values
     var initialValues = [UInt64]()
     for _ in 0 ..< testCount {
-      initialValues.append(UInt64.random(in: .min ... .max, using: &PermutedCongruentialGenerator.default))
-      PermutedCongruentialGenerator.default.advance(stepSize)
+      initialValues.append(UInt64.random(in: .min ... .max, using: &pcg))
+      pcg.advance(stepSize)
     }
     
     // Reset the stream by jumping backward
-    PermutedCongruentialGenerator.default.advance(-testCount * (stepSize + 1))
+    pcg.advance(-testCount * (stepSize + 1))
     
     // Calculate jump values
     var jumpValues = [UInt64]()
     for _ in 0 ..< testCount {
-      jumpValues.append(UInt64.random(in: .min ... .max, using: &PermutedCongruentialGenerator.default))
-      PermutedCongruentialGenerator.default.advance(stepSize)
+      jumpValues.append(UInt64.random(in: .min ... .max, using: &pcg))
+      pcg.advance(stepSize)
     }
     
     // Ensure values are equal
